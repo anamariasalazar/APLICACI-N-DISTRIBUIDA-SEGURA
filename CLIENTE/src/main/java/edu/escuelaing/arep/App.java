@@ -6,7 +6,9 @@ public class App {
         port(getPort());
         secure("keystores/ecikeystore.p12", "123456", "keystores/myTrustStore","123456");
         staticFileLocation("/static");
-        get("/server", (req, res) -> "Ingreso exitoso");
+        get("/server", (req, res) -> {
+            return "Ingreso exitoso";
+        });
     }
     static int getPort() {
         if (System.getenv("PORT") != null) {

@@ -19,7 +19,7 @@ public class App {
         staticFileLocation("/static");
 
         get("/", (req,res) -> {
-            res.redirect("login.html");
+            res.redirect("index.html");
 
             return "";
         });
