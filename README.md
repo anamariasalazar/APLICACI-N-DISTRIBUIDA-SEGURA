@@ -83,7 +83,121 @@ java -cp "target/classes:target/dependency/*" edu.escuelaing.arep.App
 java -cp "target/classes:target/dependency/*" edu.escuelaing.arep.App
 ```
 
+## Despliegue en AWS
 
+### Adquirir Servicios
+
+>Se  comprime la carpeta que contiene ambos proyecto y ese archivo comprimido se lleva a la carpeta donde están claves de conexión  a la máquina EC2
+> 
+> ![](/Imagenes/1.PNG)
+> 
+> Por linea de comandos en este caso es la dirección de conexión via ssh que da AWS para acceder a la maquina EC2, se reemplazando ```ssh``` por ```sftp```
+> 
+> ![](/Imagenes/2.PNG)
+> 
+> Se pasa  el archivo hacia la maquina con el comando ```put```  
+> 
+> ![](/Imagenes/3.PNG)
+> 
+> Ahora se  ingresa a la maquina con el protocolo ```ssh```
+> 
+> ![](/Imagenes/4.PNG)
+> 
+> Se descomprime el archivo que fue transferido con el comando ```unzip``` y el nombre del archivo
+
+> 
+### Creación llaves y certificados de seguridad
+
+> Se ingresan  los siguientes comandos para eliminar las llaves existentes, en orden:
+> 
+```
+cd AREPAPPSEGURA
+
+cd LOGIN
+
+rm -rf keystores
+
+cd ..
+
+cd CLIENTE
+
+rm -rf keystores
+
+cd ..
+```
+
+> Se crea unas nuevas por lo cual se accede a la ubicación LOGIN
+> 
+```
+cd LOGIN
+```
+
+> Crearemos un nuevo directorio keystores
+
+```
+mkdir keystores
+```
+```
+cd keystores
+```
+
+> Creación de las llaves 
+```
+keytool -genkeypair -alias ecikeypair -keyalg RSA -keysize 2048-storetype PKCS12 -keystore ecikeystore.p12 -validity 3650
+```
+> En el nombre se le pone el nombre de la maquina en la que se estara corriendo el servicio, en este caso debe ser el dominio de la maquina EC2, y en los demás los que le corresponda
+
+> Creación certificado
+```
+keytool -export -keystore ./ecikeystore.p12 -alias ecikeypair -file ecicert.cer
+```
+
+> Creación llave de confianza
+```
+keytool -import -file ./ecicert.cer -alias firstCA -keystore myTrustStore
+```
+
+> Despues de haber creado los 3 archivos se copiay pega en la carpeta CLIENTE, con los siguientes comando:
+> 
+```
+cd ..
+
+cp -r keystores/ ~/AREPAPPSEGURA/CLIENTE/
+```
+
+### Despliegue
+
+>En dos terminales diferentes ubicadas una en la carpeta CLIENTE y la otra en la carpeta LOGIN, se ingresa el siguiente comando en ambas:
+
+```
+java -cp "target/classes:target/dependency/*" edu.escuelaing.arep.App
+```
+### Prueba
+
+> Se ingresa a el  browser y consultar la dirección:
+> 
+```
+https://+ruta del servicio amazon+:4567
+```
+
+En la pagina del login e introduciremos como credenciales
+
+```
+Correo: anamariasalazar
+Contraseña: ana
+```
+> 
+> ![](/Imagenes/5.PNG)
+>
+> Al ingresar aparece la siguiente pestaña que muestra que el ingreso fue exitoso
+> 
+> ![](/Imagenes/6.PNG)
+> 
+## Video explicación despliegue en AWS
+
+Podemos abrir este enlace y descargarlo
+
+[Descargar video]()
 
 
 ## Construido con
