@@ -6,9 +6,11 @@ En las aplicaciones distribuidas se van a aplicar en cada una de las aplicacion 
 Esta se puede ver de las siguientes manera:
 
 **Localhost:** Esta arquitectura tiene dos servicios diferentes que por medio del protocolo https se comunican entre ellos, el localhost tiene el login entra desde el browser por por medio del protrocol https.
+> ![](/Imagenes/7.PNG)
+
 
 **AWS:** Es similar a la del localhost, la diferencia es que los servicios estan dentro de una máquina EC2 de AWS.
-
+> ![](/Imagenes/8.PNG)
 
 ### Requisitos previos
 
